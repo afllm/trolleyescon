@@ -47,13 +47,13 @@ public class json extends HttpServlet {
             throws ServletException, IOException, ClassNotFoundException {
         response.setContentType("application/json;charset=UTF-8");
         PrintWriter out = response.getWriter();
-        String strJson = "{\"status\":200,\"msg\":\"antes del tray\"}";
+        String strJson = "";
         try {
             HttpSession sesionObj = request.getSession();
-            strJson = "{\"status\":200,\"msg\":\"dentro del tray\"}";
+            
             String strOp = request.getParameter("op");
             String usuario = "alejandro";
-            String clave = "indescifrable";
+            String clave = "6900d921b5f54cd6649180380512762f312b57bbf2bad09824bdaa96a3e8075a";//indescifrable
             String strSecreto = "01234567899876543210";
             if (strOp != null) {
                 if (!strOp.equalsIgnoreCase("")) {

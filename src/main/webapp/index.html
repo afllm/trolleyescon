@@ -14,6 +14,7 @@ and open the template in the editor.
               crossorigin="anonymous">
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
         crossorigin="anonymous"></script>
+        <script src='js/forge-sha256.min.js'></script>
     </head>
     <body>
         <div class="container">
@@ -107,7 +108,7 @@ and open the template in the editor.
                 compruebaLogin();  
 
                 $(".btn").on('click', (evento) => {
-                    //location.reload();
+                    
                     var op = evento.currentTarget.value;
                     if (op === "reset") {
 
@@ -132,28 +133,24 @@ and open the template in the editor.
                             $("#pass").attr('style', 'background:white');
                             $("#divPass").removeClass("has-error");
                         }
-                        
-                        if (($("#user").val() != '') && ($("#pass").val() == '')){
-                            //location.reload();
-                        } 
-
                     }
                     
-                    if(op==="logout"){
-                        //compruebaLogin();
-                        //location.reload();
-                    }
-                    //console.log("antes del ajax");
+                    
+                    var pass = forge_sha256($("#pass").val());
+                    var user = $("#user").val();
+                   
+                    
                     $.ajax({
-                        url: "/trolleyescon/json?op=" + op,
+                        url: "/trolleyescon/json?op=" + op + "",
                         cache: false,
-                        method: "get",
-                        data: $("#form").serialize(),
+                        method: "post",
+                        data: {user:user,pass:pass},
                         dataType: "json",
                         success: function (data) {
                             $("#error").hide();
                             var mensaje = "mensaje del servidor: " + data.msg;
                             $("#alerta").empty().show(500).append(mensaje);
+                            compruebaLogin();
                         },
                         error: function (data) {
                             $("#alerta").hide();
@@ -163,7 +160,11 @@ and open the template in the editor.
                                 var mensaje = "mensaje del servidor: " + data.responseJSON.msg;
                             }
                             $("#error").empty().show(500).append(mensaje);
+                            compruebaLogin();
 
+                        },
+                        complete: function(){
+                            compruebaLogin();
                         }
                     });
 
